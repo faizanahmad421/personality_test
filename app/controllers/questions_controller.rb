@@ -37,6 +37,7 @@ class QuestionsController < ApplicationController
     else
       flash.now[:danger] = @question.errors.full_messages.to_sentence
       render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
@@ -48,6 +49,7 @@ class QuestionsController < ApplicationController
     else
       flash.now[:danger] = @question.errors.full_messages.to_sentence
       render :index, status: :unprocessable_entity
+    end
   end
 
   private

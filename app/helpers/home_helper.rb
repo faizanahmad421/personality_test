@@ -1,4 +1,4 @@
-module ActivitiesHelper
+module HomeHelper
   def calculate_score
     score = 0
     question_answer_ids = session[:question_answer_ids]

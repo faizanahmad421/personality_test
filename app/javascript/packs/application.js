@@ -9,3 +9,8 @@ require("@rails/activestorage").start()
 require("channels")
 require("bootstrap")
 require('packs/report')
+
+document.addEventListener("turbolinks:load", () => {
+  $('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="popover"]').popover()
+})
