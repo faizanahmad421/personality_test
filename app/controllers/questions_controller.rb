@@ -1,4 +1,5 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_admin!
   before_action :set_question, only: %i[ show edit update destroy ]
 
   def index
@@ -20,44 +21,35 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params)
 
-    respond_to do |format|
-      if @question.save
-        format.html { redirect_to question_url(@question), notice: 'Question was successfully created.' }
-        format.json { render :show, status: :created, location: @question }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @question.errors, status: :unprocessable_entity }
-      end
+    if @question.save
+      redirect_to question_url(@question), notice: 'Question is successfully created.'
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    respond_to do |format|
-      if @question.update(question_params)
-        format.html { redirect_to question_url(@question), notice: 'Question is successfully updated.' }
-        format.json { render :show, status: :ok, location: @question }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @question.errors, status: :unprocessable_entity }
-      end
-    end
+    if @question.update(question_params)
+      redirect_to question_url(@question), notice: 'Question is successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
   end
 
   def destroy
     @question.destroy
 
-    respond_to do |format|
-      format.html { redirect_to questions_url, notice: 'Question is successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    if @question.destroy
+      redirect_to questions_url, notice: 'Question is successfully destroyed.'
+    else
+      render :index, status: :unprocessable_entity
   end
 
   private
-    def set_question
-      @question = Question.find(params[:id])
-    end
+  def set_question
+    @question = Question.find(params[:id])
+  end
 
-    def question_params
-      params.require(:question).permit(:content, options_attributes: [:id, :_destroy, :content, :option_type])
-    end
+  def question_params
+    params.require(:question).permit(:content, options_attributes: %i[id _destroy content option_type])
+  end
 end
