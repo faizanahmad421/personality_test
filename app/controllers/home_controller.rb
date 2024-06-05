@@ -1,14 +1,21 @@
 class HomeController < ApplicationController
+  include HomeHelper
+
   before_action :set_session, only: %i[index]
   before_action :map_question_options, only: %i[create]
 
   def index
+    if params[:page].blank?
+      empty_cookies_and_session
+      max_questions
+    end
+
     @questions = Question.paginate(page: params[:page], per_page: 1)
     map_question_options if cookies[:question_id]
   end
 
   def create
-    if session[:question_answer_ids].length < 4
+    if session[:question_answer_ids].length < session[:max_questions]
       flash[:danger] = 'Every Question should be answered'
     else
       result = calculate_score
@@ -29,30 +36,18 @@ class HomeController < ApplicationController
   end
 
   def set_session
-    return unless session[:question_answer_ids].blank?
+    return if session[:question_answer_ids].present?
 
     session[:question_answer_ids] = HashWithIndifferentAccess.new
-  end
-
-  def calculate_score
-    score = 0
-    question_answer_ids = session[:question_answer_ids]
-
-    question_answer_ids.each do |key, value|
-      ans = Option.find_by(id: value)
-      if ans.introvert?
-        score = score - 5
-      elsif ans.extrovert?
-        score = score + 5
-      end
-    end
-    
-    score < 0 ? 'Introvert' : 'Extrovert'
   end
 
   def empty_cookies_and_session
     session[:question_answer_ids] = nil
     cookies.delete :question_id
     cookies.delete :answer_id
+  end
+
+  def max_questions
+    session[:max_questions] = Question.count
   end
 end
