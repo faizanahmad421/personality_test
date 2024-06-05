@@ -1,24 +1,16 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Steps For Running The Project Locally
 
-Things you may want to cover:
+* Clone the project 
+- git clone https://github.com/faizanahmad421/personality_test.git
 
-* Ruby version
+* Go to the root directory of the project
+- Install the required Ruby(3.1.2) and Rails(6.1.7) versions
+- RUN <code>bundle install</code>
+- RUN <code>yarn</code>
+- RUN <code>rails db:create</code>
+- RUN <code>rails db:migrate</code>
+- RUN <code>rails db:seed</code> (To create the test data)
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* that's all
