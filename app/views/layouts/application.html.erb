@@ -11,16 +11,10 @@
   </head>
 
   <body>
-  <%= render 'layouts/bar' %>
+    <%= render 'layouts/bar' %>
 
-  <% flash.each do |key, message| %>
-    <div class="alert <%= flash_class(key) %> alert-dismissible fade show text-center" role="alert">
-      <%= message %>
+    <div class="mt-5 mx-3">
+      <%= yield %>
     </div>
-  <% end %>
-
-  <div class="mt-5 mx-3">
-    <%= yield %>
-  </div>
   </body>
 </html>

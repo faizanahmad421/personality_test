@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
   devise_for :admins
+  resources :questions
 
   devise_scope :admin do
     authenticated :admin do
-      root 'home#index', as: :authenticated_root
+      root 'questions#index', as: :authenticated_root
+      resources :questions
     end
 
     unauthenticated do
