@@ -9,7 +9,8 @@ Rails.application.routes.draw do
     end
 
     unauthenticated do
-      root 'devise/sessions#new', as: :unauthenticated_root
+      root 'home#index', as: :unauthenticated_root
+      post '/score', to: 'home#create', as: :score
     end
   end
 end

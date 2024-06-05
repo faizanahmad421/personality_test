@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
   before_action :set_question, only: %i[ show edit update destroy ]
 
   def index
-    @questions = Question.all
+    @questions = Question.paginate(page: params[:page], per_page: 1)
   end
 
   def show; end
@@ -11,7 +11,7 @@ class QuestionsController < ApplicationController
   def new
     @question = Question.new
 
-    4.times do
+    NO_OF_OPTIONS.times do
       @question.options.new
     end
   end
@@ -22,16 +22,20 @@ class QuestionsController < ApplicationController
     @question = Question.new(question_params)
 
     if @question.save
-      redirect_to question_url(@question), notice: 'Question is successfully created.'
+      flash.now[:success] = 'Question is successfully created.'
+      redirect_to question_url(@question)
     else
+      flash.now[:danger] = @question.errors.full_messages.to_sentence
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
     if @question.update(question_params)
-      redirect_to question_url(@question), notice: 'Question is successfully updated.'
+      flash[:success] = 'Question is successfully updated.'
+      redirect_to question_url(@question)
     else
+      flash.now[:danger] = @question.errors.full_messages.to_sentence
       render :edit, status: :unprocessable_entity
   end
 
@@ -39,8 +43,10 @@ class QuestionsController < ApplicationController
     @question.destroy
 
     if @question.destroy
-      redirect_to questions_url, notice: 'Question is successfully destroyed.'
+      flash.now[:success] = 'Question is successfully destroyed.'
+      redirect_to questions_url
     else
+      flash.now[:danger] = @question.errors.full_messages.to_sentence
       render :index, status: :unprocessable_entity
   end
 
