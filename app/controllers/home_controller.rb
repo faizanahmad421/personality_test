@@ -8,14 +8,12 @@ class HomeController < ApplicationController
   end
 
   def create
-    if session[:question_answer_ids].present? && session[:question_answer_ids].length == 4
-      result = calculate_score
-      session[:question_answer_ids] = nil
-      cookies.delete :question_id
-      cookies.delete :answer_id
-      redirect_to unauthenticated_root_url, notice: "You are an #{result}"
-    else
+    if session[:question_answer_ids].length < 4
       redirect_to unauthenticated_root_url(page: params[:page]), notice: 'Every Question should be answered'
+    else
+      result = calculate_score
+      empty_cookies_and_session
+      redirect_to unauthenticated_root_url, notice: "You are an #{result}"
     end
   end
 
@@ -47,5 +45,11 @@ class HomeController < ApplicationController
     end
     
     score < 0 ? 'Introvert' : 'Extrovert'
+  end
+
+  def empty_cookies_and_session
+    session[:question_answer_ids] = nil
+    cookies.delete :question_id
+    cookies.delete :answer_id
   end
 end
