@@ -2,7 +2,7 @@ setCookies = (question_id, option_id, max_length, page_no) => {
   resetCookies();
   document.cookie = "answer_id=" + option_id;
   document.cookie = "question_id=" + question_id;
-  
+
   if (page_no == max_length){
     $(`#submitButton`).removeClass("d-none")
   }
