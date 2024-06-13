@@ -6,10 +6,7 @@
       <b><%= question.content %></b><br /><br />
       <div class="btn-group-toggle w-100" data-toggle="buttons">
         <% question.options.each do |option| %>
-          <label class="btn btn-outline-primary w-100 mb-2">
-            <input type="radio" name="options" id="option1" autocomplete="off" id="option-<%= option.id %>" onClick="setCookies(<%= question.id %>,<%= option.id %>, <%= session[:max_questions] %>,<%= params[:page] %>)">
-            <%= option.content %>
-          </label><br/>
+          <%= render partial: 'form', locals: { question: question, option: option } %>
         <% end %>
       </div><br />
     <% end %>
@@ -20,7 +17,7 @@
     <div class="page_info">
       <%= page_entries_info @questions %>
     </div>
-    <%= will_paginate @questions, :container => false %>
+    <%= will_paginate @questions, :container => false, link_options: { 'data-remote': true } %>
   </div>
   <button class="d-none btn btn-lg btn-outline-primary mt-5" id="submitButton"><%= link_to 'Submit Answers', score_path(page: params[:page]), method: :post %></button>
 </div>
