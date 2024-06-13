@@ -12,6 +12,11 @@ class HomeController < ApplicationController
 
     @questions = Question.paginate(page: params[:page], per_page: 1)
     map_question_options if cookies[:question_id]
+
+    respond_to do |format|
+      format.js { render layout: false }
+      format.html { render 'index' }
+    end
   end
 
   def create
